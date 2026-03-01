@@ -1,0 +1,456 @@
+/* ============================================================
+   banque.css — Feuille de style partagée BanqueCore
+   Utilisée par : depot.html & retrait.html
+   ============================================================ */
+
+/* ── Variables ──────────────────────────────────────────── */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Palette commune */
+  --bg:         #0e0f13;
+  --surface:    #16181f;
+  --surface-2:  #1e2028;
+  --border:     rgba(255,255,255,0.07);
+  --text:       #e8e9ef;
+  --text-muted: #7a7d8c;
+  --white:      #ffffff;
+
+  /* Dépôt — vert émeraude */
+  --depot-accent:   #2dce7e;
+  --depot-glow:     rgba(45, 206, 126, 0.18);
+  --depot-sidebar:  linear-gradient(160deg, #0b2d1e 0%, #0a1a12 100%);
+  --depot-orb1:     rgba(45, 206, 126, 0.25);
+  --depot-orb2:     rgba(0, 200, 120, 0.10);
+
+  /* Retrait — ambre/or */
+  --retrait-accent:  #f5a623;
+  --retrait-glow:    rgba(245, 166, 35, 0.18);
+  --retrait-sidebar: linear-gradient(160deg, #2a1e07 0%, #191106 100%);
+  --retrait-orb1:    rgba(245, 166, 35, 0.25);
+  --retrait-orb2:    rgba(220, 130, 20, 0.10);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --transition: 0.22s ease;
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout principal ───────────────────────────────────── */
+.page-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────────────────────── */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 32px;
+  overflow: hidden;
+}
+
+.depot-page  .sidebar { background: var(--depot-sidebar); }
+.retrait-page .sidebar { background: var(--retrait-sidebar); }
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: auto;
+}
+
+.depot-page  .brand-icon { color: var(--depot-accent); }
+.retrait-page .brand-icon { color: var(--retrait-accent); }
+
+.brand-icon { font-size: 1.4rem; }
+
+/* Orbs décoratifs */
+.sidebar-visual {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 24px;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.depot-page  .orb-1 { width: 220px; height: 220px; top: 20px; right: -60px; background: var(--depot-orb1); }
+.depot-page  .orb-2 { width: 140px; height: 140px; top: 140px; left: -20px; background: var(--depot-orb2); }
+.retrait-page .orb-1 { width: 220px; height: 220px; top: 20px; right: -60px; background: var(--retrait-orb1); }
+.retrait-page .orb-2 { width: 140px; height: 140px; top: 140px; left: -20px; background: var(--retrait-orb2); }
+
+.sidebar-label {
+  position: relative;
+  z-index: 1;
+}
+
+.label-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.depot-page  .label-tag { color: var(--depot-accent); }
+.retrait-page .label-tag { color: var(--retrait-accent); }
+
+.label-title {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.label-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 220px;
+}
+
+/* Footer sidebar */
+.sidebar-footer {
+  margin-top: 28px;
+}
+
+.secure-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── Zone formulaire ────────────────────────────────────── */
+.form-area {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 40px;
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header formulaire ──────────────────────────────────── */
+.form-header {
+  margin-bottom: 36px;
+}
+
+.op-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.depot-badge {
+  background: var(--depot-glow);
+  color: var(--depot-accent);
+  border: 1px solid rgba(45,206,126,0.3);
+}
+
+.retrait-badge {
+  background: var(--retrait-glow);
+  color: var(--retrait-accent);
+  border: 1px solid rgba(245,166,35,0.3);
+}
+
+.form-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.form-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Champs du formulaire ───────────────────────────────── */
+.bank-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.optional {
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.depot-page  .input-icon { color: rgba(45,206,126,0.5); }
+.retrait-page .input-icon { color: rgba(245,166,35,0.5); }
+
+.field-input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px 12px 38px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field-input::placeholder { color: #4b4e5c; }
+
+.field-input:focus {
+  border-color: var(--depot-accent);
+  box-shadow: 0 0 0 3px var(--depot-glow);
+}
+
+.retrait-page .field-input:focus {
+  border-color: var(--retrait-accent);
+  box-shadow: 0 0 0 3px var(--retrait-glow);
+}
+
+/* Select */
+.field-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7d8c' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.field-select option {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* Montant */
+.amount-wrapper { position: relative; }
+
+.currency-tag {
+  position: absolute;
+  left: 14px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.depot-page  .currency-tag { background: var(--depot-glow); color: var(--depot-accent); }
+.retrait-page .currency-tag { background: var(--retrait-glow); color: var(--retrait-accent); }
+
+.amount-input {
+  padding-left: 60px;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+/* ── Récapitulatif ──────────────────────────────────────── */
+.recap-box {
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.depot-recap {
+  background: var(--depot-glow);
+  border: 1px solid rgba(45,206,126,0.2);
+}
+
+.retrait-recap {
+  background: var(--retrait-glow);
+  border: 1px solid rgba(245,166,35,0.2);
+}
+
+.recap-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.depot-recap  .recap-value { color: var(--depot-accent); font-weight: 500; }
+.retrait-recap .recap-value { color: var(--retrait-accent); font-weight: 500; }
+
+/* ── Boutons ────────────────────────────────────────────── */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-secondary {
+  flex: 0 0 auto;
+  padding: 13px 22px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--white);
+}
+
+.btn-primary {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.depot-btn  { background: var(--depot-accent); color: #000; }
+.retrait-btn { background: var(--retrait-accent); color: #000; }
+
+.btn-arrow {
+  font-size: 1rem;
+  transition: transform var(--transition);
+}
+
+.btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+/* ── Note bas de page ───────────────────────────────────── */
+.form-note {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.form-note a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.depot-page  .form-note a:hover { color: var(--depot-accent); }
+.retrait-page .form-note a:hover { color: var(--retrait-accent); }
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .page-grid { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    height: auto;
+    min-height: 200px;
+    padding: 28px 24px 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+  .sidebar-visual { display: none; }
+  .form-area { padding: 28px 20px; }
+  .form-card { padding: 32px 24px; }
+}
+
+@media (max-width: 480px) {
+  .field-row { grid-template-columns: 1fr; }
+  .form-card { padding: 24px 18px; }
+  .form-actions { flex-direction: column; }
+}

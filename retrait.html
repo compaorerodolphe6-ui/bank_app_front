@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Retrait — BanqueCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/banque.css">
+</head>
+<body class="retrait-page">
+
+  <div class="page-grid">
+
+    <!-- Sidebar décorative -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">◆</span>
+        <span class="brand-name">BanqueCore</span>
+      </div>
+      <div class="sidebar-visual">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="sidebar-label">
+          <p class="label-tag">Opération</p>
+          <h2 class="label-title">Retrait<br/>de fonds</h2>
+          <p class="label-desc">Débitez votre compte instantanément. Plafonds et sécurités appliqués automatiquement.</p>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <span class="secure-badge">🔒 Connexion sécurisée SSL</span>
+      </div>
+    </aside>
+
+    <!-- Formulaire principal -->
+    <main class="form-area">
+      <div class="form-card">
+
+        <div class="form-header">
+          <div class="op-badge retrait-badge">RETRAIT</div>
+          <h1 class="form-title">Effectuer un retrait</h1>
+          <p class="form-sub">Renseignez les informations ci-dessous pour débiter votre compte.</p>
+        </div>
+
+        <form class="bank-form" novalidate>
+
+          <div class="field-group">
+            <label class="field-label" for="compte-retrait">Numéro de compte</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◈</span>
+              <input class="field-input" id="compte-retrait" type="text" placeholder="FR76 XXXX XXXX XXXX XXXX" maxlength="34" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="titulaire-retrait">Titulaire du compte</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◉</span>
+              <input class="field-input" id="titulaire-retrait" type="text" placeholder="Nom complet" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="montant-retrait">Montant</label>
+              <div class="input-wrapper amount-wrapper">
+                <span class="currency-tag currency-retrait">EUR</span>
+                <input class="field-input amount-input" id="montant-retrait" type="number" min="1" step="0.01" placeholder="0,00" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="devise-retrait">Devise</label>
+              <div class="input-wrapper">
+                <span class="input-icon">◎</span>
+                <select class="field-input field-select" id="devise-retrait">
+                  <option value="EUR">Euro (€)</option>
+                  <option value="USD">Dollar US ($)</option>
+                  <option value="GBP">Livre Sterling (£)</option>
+                  <option value="CHF">Franc Suisse</option>
+                  <option value="XOF">Franc CFA</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="mode-retrait">Mode de retrait</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◇</span>
+              <select class="field-input field-select" id="mode-retrait">
+                <option value="">Sélectionner un mode…</option>
+                <option value="especes">Espèces (guichet)</option>
+                <option value="virement">Virement bancaire</option>
+                <option value="cheque">Chèque</option>
+                <option value="mobile">Paiement mobile</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="pin-retrait">Code d'autorisation</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◉</span>
+              <input class="field-input" id="pin-retrait" type="password" placeholder="••••••" maxlength="6" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="motif-retrait">Motif du retrait <span class="optional">(facultatif)</span></label>
+            <div class="input-wrapper">
+              <span class="input-icon">◻</span>
+              <input class="field-input" id="motif-retrait" type="text" placeholder="Ex. Achat immobilier" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="date-retrait">Date d'effet</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◈</span>
+              <input class="field-input" id="date-retrait" type="date" />
+            </div>
+          </div>
+
+          <div class="recap-box retrait-recap">
+            <div class="recap-line">
+              <span>Plafond quotidien</span>
+              <span class="recap-value">10 000 €</span>
+            </div>
+            <div class="recap-line">
+              <span>Frais applicables</span>
+              <span class="recap-value">0,5% (min. 1,50 €)</span>
+            </div>
+            <div class="recap-line">
+              <span>Délai de traitement</span>
+              <span class="recap-value">Instantané</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="reset" class="btn-secondary">Réinitialiser</button>
+            <button type="submit" class="btn-primary retrait-btn">
+              <span>Confirmer le retrait</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+
+        </form>
+
+        <p class="form-note">Besoin d'aide ? <a href="#">Contactez le support</a></p>
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>
