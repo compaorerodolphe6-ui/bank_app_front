@@ -1,11 +1,341 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accueil — BAC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/banque.css">
+  <style>
+    /* ── Variables spécifiques à la page d'accueil ── */
+    :root {
+      --home-accent:   #c9a96e;
+      --home-glow:     rgba(201,169,110,0.18);
+      --home-sidebar:  linear-gradient(160deg, #1e1a0e 0%, #120f07 100%);
+      --home-orb1:     rgba(201,169,110,0.25);
+      --home-orb2:     rgba(180,140,60,0.10);
+
+      --depot-accent:   #2dce7e;
+      --depot-glow:     rgba(45,206,126,0.15);
+      --retrait-accent: #f5a623;
+      --retrait-glow:   rgba(245,166,35,0.15);
+      --history-accent: #7b8cde;
+      --history-glow:   rgba(123,140,222,0.15);
+    }
+
+    .home-page .sidebar        { background: var(--home-sidebar); }
+    .home-page .brand-icon     { color: var(--home-accent); }
+    .home-page .label-tag      { color: var(--home-accent); }
+    .home-page .orb-1 { width:220px; height:220px; top:20px; right:-60px; background: var(--home-orb1); }
+    .home-page .orb-2 { width:140px; height:140px; top:140px; left:-20px; background: var(--home-orb2); }
+
+    /* ── Contenu principal ── */
+    .home-main {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* Hero */
+    .home-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--home-accent);
+      background: var(--home-glow);
+      border: 1px solid rgba(201,169,110,0.3);
+      padding: 4px 14px;
+      border-radius: 99px;
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    .home-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .home-title em {
+      font-style: italic;
+      color: var(--home-accent);
+    }
+
+    .home-sub {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 460px;
+    }
+
+    /* ── Carte solde ── */
+    .balance-card {
+      background: var(--surface-2);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.35);
+    }
+
+    .balance-left { flex: 1; }
+
+    .balance-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .balance-amount {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--home-accent);
+    }
+
+    .balance-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: #2dce7e;
+    }
+
+    .balance-status::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #2dce7e;
+      box-shadow: 0 0 6px #2dce7e;
+      display: inline-block;
+    }
+
+    .balance-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--border);
+    }
+
+    .balance-right { text-align: right; }
+
+    .balance-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .balance-account {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Grille des actions ── */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .action-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px 18px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .action-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+
+    .card-depot::before   { background: var(--depot-accent); }
+    .card-depot:hover     { border-color: rgba(45,206,126,0.35); }
+    .card-depot .card-icon-wrap   { background: var(--depot-glow);   color: var(--depot-accent); }
+    .card-depot .card-arrow       { color: var(--depot-accent); }
+
+    .card-retrait::before  { background: var(--retrait-accent); }
+    .card-retrait:hover    { border-color: rgba(245,166,35,0.35); }
+    .card-retrait .card-icon-wrap  { background: var(--retrait-glow); color: var(--retrait-accent); }
+    .card-retrait .card-arrow      { color: var(--retrait-accent); }
+
+    .card-history::before  { background: var(--history-accent); }
+    .card-history:hover    { border-color: rgba(123,140,222,0.35); }
+    .card-history .card-icon-wrap  { background: var(--history-glow); color: var(--history-accent); }
+    .card-history .card-arrow      { color: var(--history-accent); }
+
+    .card-icon-wrap {
+      width: 42px; height: 42px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+    }
+
+    .card-op-label {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+    }
+
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-arrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: transform 0.2s ease;
+    }
+
+    .action-card:hover .card-arrow { transform: translateX(4px); }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .actions-grid { grid-template-columns: 1fr 1fr; }
+      .card-history { grid-column: span 2; }
+      .balance-card { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 480px) {
+      .actions-grid { grid-template-columns: 1fr; }
+      .card-history { grid-column: span 1; }
+      .home-title { font-size: 1.7rem; }
+      .balance-divider { display: none; }
+    }
+  </style>
 </head>
-<body>
-    <h1>Page d'accueil</h1>
+<body class="home-page">
+
+  <div class="page-grid">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">◆</span>
+        <span class="brand-name">BAC</span>
+      </div>
+      <div class="sidebar-visual">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="sidebar-label">
+          <p class="label-tag">Plateforme</p>
+          <h2 class="label-title">Gestion<br/>de compte</h2>
+          <p class="label-desc">Accédez à toutes vos opérations bancaires depuis un seul espace sécurisé.</p>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <span class="secure-badge">🔒 Connexion sécurisée SSL</span>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="form-area">
+      <div class="home-main">
+
+        <!-- Hero -->
+        <div>
+          <span class="home-tag">Tableau de bord</span>
+          <h1 class="home-title">Bienvenue sur <em>BAC</em></h1>
+          <p class="home-sub">Votre espace bancaire personnel. Déposez, retirez et consultez l'historique de vos transactions en toute sécurité.</p>
+        </div>
+
+        <!-- Solde -->
+        <div class="balance-card">
+          <div class="balance-left">
+            <div class="balance-label">Solde disponible</div>
+            <div class="balance-amount">830 000 F CFA</div>
+            <div class="balance-status">Compte actif</div>
+          </div>
+          <div class="balance-divider"></div>
+          <div class="balance-right">
+            <div class="balance-name">Compte Principal</div>
+            <div class="balance-account">FR76 •••• •••• 4821</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-grid">
+
+          <a href="depot.html" class="action-card card-depot">
+            <div class="card-icon-wrap">⬇</div>
+            <div>
+              <div class="card-op-label">Opération</div>
+              <div class="card-title">Dépôt<br/>de fonds</div>
+            </div>
+            <p class="card-desc">Créditez votre compte instantanément en toute sécurité.</p>
+            <span class="card-arrow">Effectuer un dépôt →</span>
+          </a>
+
+          <a href="retrait.html" class="action-card card-retrait">
+            <div class="card-icon-wrap">⬆</div>
+            <div>
+              <div class="card-op-label">Opération</div>
+              <div class="card-title">Retrait<br/>de fonds</div>
+            </div>
+            <p class="card-desc">Débitez votre compte avec plafonds et protections automatiques.</p>
+            <span class="card-arrow">Effectuer un retrait →</span>
+          </a>
+
+          <a href="history.html" class="action-card card-history">
+            <div class="card-icon-wrap">☰</div>
+            <div>
+              <div class="card-op-label">Consultation</div>
+              <div class="card-title">Historique<br/>des transactions</div>
+            </div>
+            <p class="card-desc">Consultez et filtrez l'ensemble de vos opérations passées.</p>
+            <span class="card-arrow">Voir l'historique →</span>
+          </a>
+
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
 </body>
 </html>
