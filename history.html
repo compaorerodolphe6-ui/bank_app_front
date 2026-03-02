@@ -1,11 +1,495 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Historique — BAC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/banque.css">
+  <style>
+    :root {
+      --history-accent: #7b8cde;
+      --history-glow:   rgba(123,140,222,0.18);
+      --history-sidebar: linear-gradient(160deg, #0e1022 0%, #080a14 100%);
+      --history-orb1:   rgba(123,140,222,0.25);
+      --history-orb2:   rgba(90,110,210,0.10);
+
+      --depot-accent:   #2dce7e;
+      --depot-glow:     rgba(45,206,126,0.15);
+      --retrait-accent: #f5a623;
+      --retrait-glow:   rgba(245,166,35,0.15);
+    }
+
+    .history-page .sidebar         { background: var(--history-sidebar); }
+    .history-page .brand-icon      { color: var(--history-accent); }
+    .history-page .label-tag       { color: var(--history-accent); }
+    .history-page .orb-1 { width:220px; height:220px; top:20px; right:-60px; background: var(--history-orb1); }
+    .history-page .orb-2 { width:140px; height:140px; top:140px; left:-20px; background: var(--history-orb2); }
+
+    /* ── Contenu principal ── */
+    .history-main {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    /* Header */
+    .history-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--history-accent);
+      background: var(--history-glow);
+      border: 1px solid rgba(123,140,222,0.3);
+      padding: 4px 14px;
+      border-radius: 99px;
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    .history-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .history-sub {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Stats rapides ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .stat-card.stat-solde  .stat-value { color: #c9a96e; }
+    .stat-card.stat-depot  .stat-value { color: var(--depot-accent); }
+    .stat-card.stat-retrait .stat-value { color: var(--retrait-accent); }
+
+    /* ── Filtres ── */
+    .filters-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-select {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+
+    .filter-select:focus {
+      border-color: var(--history-accent);
+    }
+
+    .filter-input {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      outline: none;
+      transition: border-color var(--transition);
+      flex: 1;
+      min-width: 130px;
+    }
+
+    .filter-input::placeholder { color: #4b4e5c; }
+    .filter-input:focus { border-color: var(--history-accent); }
+
+    .filter-btn {
+      background: var(--history-glow);
+      border: 1px solid rgba(123,140,222,0.3);
+      border-radius: var(--radius-sm);
+      padding: 9px 18px;
+      color: var(--history-accent);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .filter-btn:hover { background: rgba(123,140,222,0.28); }
+
+    .export-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition);
+      margin-left: auto;
+    }
+
+    .export-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Tableau ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      padding: 12px 18px;
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    td {
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr {
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+    /* Badge type */
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .type-badge.depot {
+      background: var(--depot-glow);
+      color: var(--depot-accent);
+      border: 1px solid rgba(45,206,126,0.25);
+    }
+
+    .type-badge.retrait {
+      background: var(--retrait-glow);
+      color: var(--retrait-accent);
+      border: 1px solid rgba(245,166,35,0.25);
+    }
+
+    /* Montant */
+    .montant-depot   { color: var(--depot-accent);   font-weight: 500; font-family: var(--font-display); }
+    .montant-retrait { color: var(--retrait-accent);  font-weight: 500; font-family: var(--font-display); }
+
+    /* Solde après */
+    .solde-apres { color: var(--text-muted); font-size: 0.82rem; }
+
+    /* Message vide */
+    .empty-msg {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* ── Retour accueil ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .back-link:hover { color: var(--history-accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stat-card.stat-solde { grid-column: span 2; }
+      th:nth-child(4), td:nth-child(4) { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .stat-card.stat-solde { grid-column: span 1; }
+      th:nth-child(5), td:nth-child(5) { display: none; }
+      .filters-bar { flex-direction: column; align-items: stretch; }
+      .export-btn { margin-left: 0; }
+    }
+  </style>
 </head>
-<body>
-    <h1>Historique</h1>
+<body class="history-page">
+
+  <div class="page-grid">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">◆</span>
+        <span class="brand-name">BAC</span>
+      </div>
+      <div class="sidebar-visual">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="sidebar-label">
+          <p class="label-tag">Consultation</p>
+          <h2 class="label-title">Historique<br/>des opérations</h2>
+          <p class="label-desc">Retrouvez toutes vos transactions passées, filtrées et triées.</p>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <span class="secure-badge">🔒 Connexion sécurisée SSL</span>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="form-area">
+      <div class="history-main">
+
+        <!-- Header -->
+        <div>
+          <a href="index.html" class="back-link">← Retour à l'accueil</a>
+          <br/><br/>
+          <span class="history-tag">Consultation</span>
+          <h1 class="history-title">Historique des transactions</h1>
+          <p class="history-sub">Consultez l'ensemble de vos opérations bancaires. Filtrez par type ou par date.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card stat-solde">
+            <div class="stat-label">Solde actuel</div>
+            <div class="stat-value" id="stat-solde">—</div>
+          </div>
+          <div class="stat-card stat-depot">
+            <div class="stat-label">Total dépôts</div>
+            <div class="stat-value" id="stat-depot">—</div>
+          </div>
+          <div class="stat-card stat-retrait">
+            <div class="stat-label">Total retraits</div>
+            <div class="stat-value" id="stat-retrait">—</div>
+          </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+          <select class="filter-select" id="filter-type" onchange="applyFilters()">
+            <option value="tous">Tous les types</option>
+            <option value="depot">Dépôts</option>
+            <option value="retrait">Retraits</option>
+          </select>
+          <input type="date" class="filter-input" id="filter-date-debut" onchange="applyFilters()" />
+          <input type="date" class="filter-input" id="filter-date-fin"   onchange="applyFilters()" />
+          <button class="filter-btn" onclick="resetFilters()">Réinitialiser</button>
+          <button class="export-btn" onclick="exportCSV()">⬇ Exporter CSV</button>
+        </div>
+
+        <!-- Tableau -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Motif</th>
+                <th>Montant</th>
+                <th>Solde après</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <!-- Rempli par JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    // ── Données fictives ──────────────────────────────────
+    const transactions = [
+      { date: '2025-01-05', type: 'depot',   motif: 'Virement salaire',       montant: 250000 },
+      { date: '2025-01-08', type: 'retrait', motif: 'Achat divers',           montant: 45000  },
+      { date: '2025-01-12', type: 'depot',   motif: 'Épargne personnelle',    montant: 50000  },
+      { date: '2025-01-15', type: 'retrait', motif: 'Paiement mobile',        montant: 15000  },
+      { date: '2025-01-20', type: 'depot',   motif: 'Transaction commerciale',montant: 120000 },
+      { date: '2025-01-25', type: 'retrait', motif: 'Espèces (guichet)',      montant: 30000  },
+      { date: '2025-02-01', type: 'depot',   motif: 'Virement salaire',       montant: 250000 },
+      { date: '2025-02-05', type: 'retrait', motif: 'Virement bancaire',      montant: 60000  },
+      { date: '2025-02-10', type: 'depot',   motif: 'Investissement',         montant: 300000 },
+      { date: '2025-02-14', type: 'retrait', motif: 'Paiement mobile',        montant: 20000  },
+      { date: '2025-02-20', type: 'depot',   motif: 'Épargne personnelle',    montant: 75000  },
+      { date: '2025-02-25', type: 'retrait', motif: 'Chèque',                 montant: 45000  },
+    ];
+
+    // Calcul du solde cumulé
+    let solde = 0;
+    transactions.forEach(t => {
+      if (t.type === 'depot')   solde += t.montant;
+      else                       solde -= t.montant;
+      t.soldeApres = solde;
+    });
+
+    // ── Formatage ─────────────────────────────────────────
+    function formatMontant(n) {
+      return n.toLocaleString('fr-FR', { minimumFractionDigits: 0 }) + ' F CFA';
+    }
+
+    function formatDate(str) {
+      const [y, m, d] = str.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    // ── Stats ─────────────────────────────────────────────
+    function updateStats(list) {
+      const totalDepot   = list.filter(t => t.type === 'depot').reduce((s, t) => s + t.montant, 0);
+      const totalRetrait = list.filter(t => t.type === 'retrait').reduce((s, t) => s + t.montant, 0);
+      const dernierSolde = list.length ? list[list.length - 1].soldeApres : 0;
+
+      document.getElementById('stat-solde').textContent   = formatMontant(dernierSolde);
+      document.getElementById('stat-depot').textContent   = formatMontant(totalDepot);
+      document.getElementById('stat-retrait').textContent = formatMontant(totalRetrait);
+    }
+
+    // ── Rendu tableau ─────────────────────────────────────
+    function renderTable(list) {
+      const tbody = document.getElementById('transactions-body');
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-msg">Aucune transaction trouvée.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = [...list].reverse().map(t => `
+        <tr>
+          <td>${formatDate(t.date)}</td>
+          <td>
+            <span class="type-badge ${t.type}">
+              ${t.type === 'depot' ? '⬇ Dépôt' : '⬆ Retrait'}
+            </span>
+          </td>
+          <td>${t.motif}</td>
+          <td class="montant-${t.type}">
+            ${t.type === 'depot' ? '+' : '-'}${formatMontant(t.montant)}
+          </td>
+          <td class="solde-apres">${formatMontant(t.soldeApres)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Filtres ───────────────────────────────────────────
+    function applyFilters() {
+      const type      = document.getElementById('filter-type').value;
+      const dateDebut = document.getElementById('filter-date-debut').value;
+      const dateFin   = document.getElementById('filter-date-fin').value;
+
+      let filtered = transactions.filter(t => {
+        if (type !== 'tous' && t.type !== type) return false;
+        if (dateDebut && t.date < dateDebut)    return false;
+        if (dateFin   && t.date > dateFin)      return false;
+        return true;
+      });
+
+      renderTable(filtered);
+      updateStats(filtered);
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-type').value       = 'tous';
+      document.getElementById('filter-date-debut').value = '';
+      document.getElementById('filter-date-fin').value   = '';
+      renderTable(transactions);
+      updateStats(transactions);
+    }
+
+    // ── Export CSV ────────────────────────────────────────
+    function exportCSV() {
+      const header = 'Date,Type,Motif,Montant (€),Solde après (€)\n';
+      const rows = transactions.map(t =>
+        `${t.date},${t.type},${t.motif},${t.type === 'depot' ? '+' : '-'}${t.montant.toFixed(2)},${t.soldeApres.toFixed(2)}`
+      ).join('\n');
+
+      const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = 'historique_bac.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Init ──────────────────────────────────────────────
+    renderTable(transactions);
+    updateStats(transactions);
+  </script>
+
 </body>
 </html>
