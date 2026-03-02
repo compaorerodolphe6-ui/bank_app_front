@@ -64,8 +64,8 @@
             <div class="field-group">
               <label class="field-label" for="montant-retrait">Montant</label>
               <div class="input-wrapper amount-wrapper">
-                <span class="currency-tag currency-retrait">EUR</span>
-                <input class="field-input amount-input" id="montant-retrait" type="number" min="1" step="0.01" placeholder="0,00" />
+                <span class="currency-tag currency-retrait">FCFA</span>
+                <input class="field-input amount-input" id="montant-retrait" type="number" min="1" step="1" placeholder="0" />
               </div>
             </div>
             <div class="field-group">
@@ -73,11 +73,11 @@
               <div class="input-wrapper">
                 <span class="input-icon">◎</span>
                 <select class="field-input field-select" id="devise-retrait">
+                  <option value="XOF">Franc CFA (F CFA)</option>
                   <option value="EUR">Euro (€)</option>
                   <option value="USD">Dollar US ($)</option>
                   <option value="GBP">Livre Sterling (£)</option>
                   <option value="CHF">Franc Suisse</option>
-                  <option value="XOF">Franc CFA</option>
                 </select>
               </div>
             </div>
@@ -124,11 +124,11 @@
           <div class="recap-box retrait-recap">
             <div class="recap-line">
               <span>Plafond quotidien</span>
-              <span class="recap-value">10 000 €</span>
+              <span class="recap-value">5 000 000 F CFA</span>
             </div>
             <div class="recap-line">
               <span>Frais applicables</span>
-              <span class="recap-value">0,5% (min. 1,50 €)</span>
+              <span class="recap-value">0,5% (min. 500 F CFA)</span>
             </div>
             <div class="recap-line">
               <span>Délai de traitement</span>
